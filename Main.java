@@ -9,16 +9,15 @@ short a = (short) rn;
 
 int  omikuzi = a;
 if (3 > a){
-    System.err.println("負け");
-    else {
-        System.err.println("勝ち");
+    System.err.println("負け");}
+else {
+    System.err.println("勝ち");
     }
 
 }
 
 
-System.out.println(rn);
 
 }
-}
+
 
