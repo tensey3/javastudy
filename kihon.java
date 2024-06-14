@@ -4,16 +4,9 @@ public class Main {
 
 public static void main(String[] args) {
 
-int x = 5;
+Int rn = new java.util.Random().nextInt(4)
 
-int y = 10;
-
-int z = x + y;
-
-String ans = "x+yは" + z;
-
-System.out.println(ans);
+System.out.println(rn);
 
 }
 }
-
