@@ -29,7 +29,7 @@ public class Timer {
     }
 
     private void resetCounterIfNeeded() {
-        int lastIndex = flam.size() - 1;
+        int lastIndex = flam.size() - 1;//じょうじ_じょじょ
         if (flam.get(lastIndex) > 99) {
             flam.set(lastIndex, 99);
             flam.add(1);
