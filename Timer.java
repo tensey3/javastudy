@@ -37,7 +37,7 @@ public class Timer {
     }
 
     private void updateTextArea() {
-        StringBuilder sb = new StringBuilder();//じょじじょうじ
+        StringBuilder sb = new StringBuilder();
         for (int counter : flam) {
             sb.append(counter).append("\n");
         }
