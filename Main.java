@@ -2,44 +2,36 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        int N = sc.nextInt();
-        int M = sc.nextInt();
-
-        int[][] list1 = new int[N][M];
-        for (int a = 0; a < N; a++) {
-            for (int b = 0; b < M; b++) {
-                list1[a][b] = sc.nextInt();
+        Scanner s = new Scanner(System.in);
+        
+        
+        
+        int N = s.nextInt();
+        int M = s.nextInt();
+        int K = s.nextInt();
+        int[] usagichan = new int[M];
+        for (int i = 0; i < M; ++i) {
+            usagichan[i] = s.nextInt();
+        }
+        s.close();
+        boolean[] occupied = new boolean[N + 1];
+        for (int i = 0; i < M; ++i) {
+            occupied[usagichan[i]] = true;
+}
+        for (int i = 1; i <= K; ++i) {
+            for (int j = 0; j < M; ++j) {
+                int currentBush = usagichan[j];
+                int nextBush = currentBush % N + 1;
+                while (occupied[nextBush]) {
+                    nextBush = nextBush % N + 1;
+                }
+                usagichan[j] = nextBush;
+                occupied[currentBush] = false;
+                occupied[nextBush] = true;
             }
+    }
+        for (int i = 0; i < M; ++i) {
+            System.out.println(usagichan[i]);
         }
-
-        int X = sc.nextInt();
-
-        int[][] list2 = new int[X][2];
-        for (int c = 0; c < X; c++) {
-            list2[c][0] = sc.nextInt() - 1;
-            list2[c][1] = sc.nextInt() - 1;
-        }
-
-        sc.close();
-
-        int fare = 0;
-        int line = 0;
-        int station = 0;
-
-        for (int d = 0; d < X; d++) {
-            int nextLine = list2[d][0];
-            int nextStation = list2[d][1];
-
-            if (station != nextStation) {
-                fare += Math.abs(list1[nextLine][nextStation] - list1[nextLine][station]);
-            }
-
-            line = nextLine;
-            station = nextStation;
-        }
-
-        System.out.println(fare);
     }
 }
