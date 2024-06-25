@@ -1,37 +1,47 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         
+        int H = scanner.nextInt();
+        int W = scanner.nextInt();
+        scanner.nextLine(); 
         
+        char[][] matrix = new char[H][W];
         
-        int N = s.nextInt();
-        int M = s.nextInt();
-        int K = s.nextInt();
-        int[] usagichan = new int[M];
-        for (int i = 0; i < M; ++i) {
-            usagichan[i] = s.nextInt();
+        for (int i = 0; i < H; i++) {
+            String line = scanner.nextLine();
+            matrix[i] = line.toCharArray();
         }
-        s.close();
-        boolean[] occupied = new boolean[N + 1];
-        for (int i = 0; i < M; ++i) {
-            occupied[usagichan[i]] = true;
-}
-        for (int i = 1; i <= K; ++i) {
-            for (int j = 0; j < M; ++j) {
-                int currentBush = usagichan[j];
-                int nextBush = currentBush % N + 1;
-                while (occupied[nextBush]) {
-                    nextBush = nextBush % N + 1;
+        
+        int maxArea = 0;
+
+        for (int i = 0; i < H; i++) {
+            for (int j = 0; j < W; j++) {
+                if (matrix[i][j] == '.') {
+                   
+                    int minWidth = W;
+                    for (int k = i; k < H && matrix[k][j] == '.'; k++) {
+                        int width = 0;
+                        while (j + width < W && matrix[k][j + width] == '.') {
+                            width++;
+                        }
+                        if (width < minWidth) {
+                            minWidth = width;
+                        }
+                        int height = k - i + 1;
+                        int area = minWidth * height;
+                        if (area > maxArea) {
+                            maxArea = area;
+                        }
+                    }
                 }
-                usagichan[j] = nextBush;
-                occupied[currentBush] = false;
-                occupied[nextBush] = true;
             }
-    }
-        for (int i = 0; i < M; ++i) {
-            System.out.println(usagichan[i]);
         }
+        
+        System.out.println(maxArea);
+        
+        scanner.close();
     }
 }
