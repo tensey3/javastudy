@@ -15,10 +15,3 @@ public class Dog {
     }
 }
 
-public class Main {
-    public static void main(String[] args) {
-        // オブジェクトの作成
-        Dog myDog = new Dog("ポチ", 3);
-        myDog.bark();
-    }
-}
