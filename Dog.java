@@ -1,12 +1,12 @@
 public class Dog {
     // フィールド（クラスの属性）
     String name;
-    int age;
+    int agea;
 
     // コンストラクタ（クラスの初期化メソッド）
     public Dog(String name, int age) {
         this.name = name;
-        this.age = age;
+        this.agea = age;
     }
 
     // メソッド（クラスの動作）
