@@ -7,24 +7,18 @@ public class Main {
         int b = 8;
         int c = a++ + ++b - --a;
         int d = ++a;
-
-        
         int y = a++;
         int z = a++ + ++ a;
-
-
-
-
-
-
-
-
-
-
+        int dd = --a;
+        int yy = a--;
+        int zz =a-- - --a;
     System.err.println(c);
     System.err.println(d);
     System.err.println(y);
     System.err.println(z);
+    System.err.println(dd);
+    System.err.println(yy);
+    System.err.println(zz);
     }
 
     public int add(int a, int b,int v) {
