@@ -8,13 +8,8 @@ public class Main {
                 sb.append(",");
             }
         }
-        sb.append(".");
 
         String s = sb.toString();
-        System.out.println("生成された文字列: " + s);
-
-        String[] stringArray = s.substring(0, s.length() - 1).split(",");
-
-        System.out.println("String 配列:");
+        System.out.println(s);
         }
     }
