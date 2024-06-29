@@ -3,9 +3,31 @@ public class Main {
         Main main = new Main();
         int result = main.add(5, 3,8); // addメソッドを呼び出し、5と3を渡す
         System.out.println("結果は: " + result); // 結果は: 8 と表示される
+        int a = 5;
+        int b = 8;
+        int c = a++ + ++b - --a;
+        int d = ++a;
+
+        
+        int y = a++;
+        int z = a++ + ++ a;
+
+
+
+
+
+
+
+
+
+
+    System.err.println(c);
+    System.err.println(d);
+    System.err.println(y);
+    System.err.println(z);
     }
 
     public int add(int a, int b,int v) {
-        return a + b; // 足し算の結果を返す
+        return a + b;
     }
 }
