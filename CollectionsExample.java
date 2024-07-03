@@ -6,7 +6,6 @@ public class CollectionsExample {
         list.add("リンゴ");
         list.add("バナナ");
         list.add("オレンジ");
-        
         for (String fruit : list) {
             System.out.println(fruit);
         }
