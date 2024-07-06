@@ -25,18 +25,7 @@ public class Keyset extends JPanel implements KeyListener {
         textArea.setFont(new Font("SansSerif", Font.BOLD, 48));
         add(textArea, BorderLayout.CENTER);
 
-        setFocusable(true);
-        requestFocusInWindow();
-
         timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                updateDirection();
-            }
-        }, 10); // 10ミリ秒の遅延
-
-        addKeyListener(this);
     }
 
     @Override
