@@ -6,26 +6,22 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 public class Keyget extends JFrame implements KeyListener {
-    private static final int WINDOW_WIDTH = 1300;
-    private static final int WINDOW_HEIGHT = 1200;
-    private static final int FONT_SIZE = 48;
-
     private JTextArea textArea;
-    private boolean isAKeyPressed, isWKeyPressed, isSKeyPressed, isDKeyPressed;
+    private boolean isAKeyPressed = false;
+    private boolean isWKeyPressed = false;
+    private boolean isSKeyPressed = false;
+    private boolean isDKeyPressed = false;
     private String lastDirection = "";
+    private boolean isDiagonalReleased = false;
 
     public Keyget() {
-        initializeUI();
-    }
-
-    private void initializeUI() {
         setTitle("Key Event Demo");
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        setSize(1300, 1200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         textArea = new JTextArea();
         textArea.setEditable(false);
-        textArea.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
+        textArea.setFont(new Font("SansSerif", Font.BOLD, 48));
         textArea.setAlignmentX(CENTER_ALIGNMENT);
         textArea.setAlignmentY(CENTER_ALIGNMENT);
         add(textArea, BorderLayout.CENTER);
@@ -37,33 +33,56 @@ public class Keyget extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // キーがタイプされたときの処理（必要な場合に実装）
+        // キーがタイプされたときの処理
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         updateKeyState(e, true);
         updateDirection();
+        isDiagonalReleased = false;
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         updateKeyState(e, false);
-        updateDirection();
+        if (!isDiagonalReleased) {
+            updateDirection();
+        }
     }
 
     private void updateKeyState(KeyEvent e, boolean isPressed) {
         switch (e.getKeyChar()) {
-            case 'a': isAKeyPressed = isPressed; break;
+            case 'a':
+                isAKeyPressed = isPressed;
+                break;
             case 'w':
-            case ' ': isWKeyPressed = isPressed; break;
-            case 's': isSKeyPressed = isPressed; break;
-            case 'd': isDKeyPressed = isPressed; break;
+            case ' ':
+                isWKeyPressed = isPressed;
+                break;
+            case 's':
+                isSKeyPressed = isPressed;
+                break;
+            case 'd':
+                isDKeyPressed = isPressed;
+                break;
+        }
+
+        // スペースキーと方向キーの同時押し解除を検出
+        if (!isPressed && (e.getKeyChar() == ' ' || e.getKeyChar() == 'w')) {
+            if (isAKeyPressed || isDKeyPressed) {
+                isDiagonalReleased = true;
+            }
+        } else if (!isPressed && (e.getKeyChar() == 'a' || e.getKeyChar() == 'd')) {
+            if (isWKeyPressed) {
+                isDiagonalReleased = true;
+            }
         }
     }
 
     private void updateDirection() {
         String newDirection = getDirection();
+
         if (!newDirection.isEmpty() && !newDirection.equals(lastDirection)) {
             textArea.setText(newDirection + "\n" + textArea.getText());
             lastDirection = newDirection;
@@ -73,14 +92,23 @@ public class Keyget extends JFrame implements KeyListener {
     }
 
     private String getDirection() {
-        if (isWKeyPressed && isAKeyPressed) return "↖️";
-        if (isWKeyPressed && isDKeyPressed) return "↗️";
-        if (isSKeyPressed && isAKeyPressed) return "↙︎";
-        if (isSKeyPressed && isDKeyPressed) return "↘︎";
-        if (isWKeyPressed) return "↑";
-        if (isSKeyPressed) return "↓";
-        if (isAKeyPressed) return "←";
-        if (isDKeyPressed) return "→";
+        if (isWKeyPressed && isAKeyPressed) {
+            return "↖️";
+        } else if (isWKeyPressed && isDKeyPressed) {
+            return "↗️";
+        } else if (isSKeyPressed && isAKeyPressed) {
+            return "↙︎";
+        } else if (isSKeyPressed && isDKeyPressed) {
+            return "↘︎";
+        } else if (isWKeyPressed) {
+            return "↑";
+        } else if (isSKeyPressed) {
+            return "↓";
+        } else if (isAKeyPressed) {
+            return "←";
+        } else if (isDKeyPressed) {
+            return "→";
+        }
         return "";
     }
 
