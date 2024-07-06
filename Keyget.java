@@ -3,7 +3,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-public class KeyEventDemo extends JFrame implements KeyListener {
+public class Keyget extends JFrame implements KeyListener {
 
     private JTextArea textArea;
     private boolean isAKeyPressed = false;
@@ -11,7 +11,7 @@ public class KeyEventDemo extends JFrame implements KeyListener {
     private boolean isSKeyPressed = false;
     private boolean isDKeyPressed = false;
 
-    public KeyEventDemo() {
+    public Keyget() {
         setTitle("Key Event Demo");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,7 +89,7 @@ public class KeyEventDemo extends JFrame implements KeyListener {
     }
 
     public static void main(String[] args) {
-        KeyEventDemo frame = new KeyEventDemo();
+        Keyget frame = new Keyget();
         frame.setVisible(true);
     }
 }
