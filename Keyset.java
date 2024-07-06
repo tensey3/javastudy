@@ -4,37 +4,39 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
-public class Keyget extends JFrame implements KeyListener {
-    private JTextArea textArea;
+public class Keyset extends JPanel implements KeyListener {
+    private final JTextArea textArea;
     private boolean isAKeyPressed = false;
     private boolean isWKeyPressed = false;
     private boolean isSKeyPressed = false;
     private boolean isDKeyPressed = false;
     private String lastDirection = "";
-    private Timer timer;
+    private final Timer timer;
     private boolean isUpdatePending = false;
 
-    public Keyget() {
-        setTitle("Key Event Demo");
-        setSize(1300, 1200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+    public Keyset() {
+        setLayout(new BorderLayout());
+
         textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setFont(new Font("SansSerif", Font.BOLD, 48));
-        textArea.setAlignmentX(CENTER_ALIGNMENT);
-        textArea.setAlignmentY(CENTER_ALIGNMENT);
         add(textArea, BorderLayout.CENTER);
-        
-        addKeyListener(this);
+
         setFocusable(true);
         requestFocusInWindow();
 
         timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                updateDirection();
+            }
+        }, 10); // 10ミリ秒の遅延
+
+        addKeyListener(this);
     }
 
     @Override
@@ -45,32 +47,22 @@ public class Keyget extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         updateKeyState(e, true);
-        scheduleUpdate();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         updateKeyState(e, false);
-        scheduleUpdate();
     }
 
     private void updateKeyState(KeyEvent e, boolean isPressed) {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
-            case KeyEvent.VK_A:
-                isAKeyPressed = isPressed;
-                break;
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_SPACE:
-                isWKeyPressed = isPressed;
-                break;
-            case KeyEvent.VK_S:
-                isSKeyPressed = isPressed;
-                break;
-            case KeyEvent.VK_D:
-                isDKeyPressed = isPressed;
-                break;
+            case KeyEvent.VK_A -> isAKeyPressed = isPressed;
+            case KeyEvent.VK_W, KeyEvent.VK_SPACE -> isWKeyPressed = isPressed;
+            case KeyEvent.VK_S -> isSKeyPressed = isPressed;
+            case KeyEvent.VK_D -> isDKeyPressed = isPressed;
         }
+        scheduleUpdate();
     }
 
     private void scheduleUpdate() {
@@ -79,10 +71,8 @@ public class Keyget extends JFrame implements KeyListener {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    SwingUtilities.invokeLater(() -> {
-                        updateDirection();
-                        isUpdatePending = false;
-                    });
+                    updateDirection();
+                    isUpdatePending = false;
                 }
             }, 10); // 10ミリ秒の遅延
         }
@@ -118,12 +108,5 @@ public class Keyget extends JFrame implements KeyListener {
             return "→";
         }
         return "";
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Keyget frame = new Keyget();
-            frame.setVisible(true);
-        });
     }
 }
