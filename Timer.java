@@ -1,25 +1,21 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 public class Timer {
     private final JTextArea timerTextArea;
     private final List<Integer> flam;
-    private final java.util.Timer timer;
+    private final javax.swing.Timer swingTimer;
 
     public Timer(JTextArea timerTextArea) {
         this.timerTextArea = timerTextArea;
-        flam = new ArrayList<>();
-        flam.add(0); // 最初のカウンターを追加
+        this.flam = new ArrayList<>();
+        this.flam.add(0); // 最初のカウンターを追加
 
-        timer = new java.util.Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateCounters();
-            }
-        }, 0, 17); // 0.017秒ごとに実行
+        // javax.swing.Timerを使ってカウントを更新
+        swingTimer = new javax.swing.Timer(17, e -> SwingUtilities.invokeLater(this::updateCounters)); // 0.017秒ごとに実行
+        swingTimer.start();
     }
 
     private void updateCounters() {

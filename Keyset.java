@@ -22,7 +22,7 @@ public class Keyset extends JPanel implements KeyListener {
 
         textArea = new JTextArea();
         textArea.setEditable(false);
-        textArea.setFont(new Font("SansSerif", Font.BOLD, 48));
+        textArea.setFont(new Font("SansSerif", Font.BOLD, 34));
         add(textArea, BorderLayout.CENTER);
 
         timer = new Timer();
