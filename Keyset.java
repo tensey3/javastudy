@@ -1,29 +1,40 @@
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 public class Keyset extends JPanel implements KeyListener {
-    private final JTextArea textArea;
+    private final JPanel directionPanel;
+    private final JLabel currentDirectionLabel;
     private boolean isAKeyPressed = false;
     private boolean isWKeyPressed = false;
     private boolean isSKeyPressed = false;
     private boolean isDKeyPressed = false;
+    private boolean isSpaceKeyPressed = false;
     private String lastDirection = "";
     private final Timer timer;
     private boolean isUpdatePending = false;
+    private final int imageSize;
 
     public Keyset() {
         setLayout(new BorderLayout());
 
-        textArea = new JTextArea();
-        textArea.setEditable(false);
-        textArea.setFont(new Font("SansSerif", Font.BOLD, 34));
-        add(textArea, BorderLayout.CENTER);
+        directionPanel = new JPanel();
+        directionPanel.setLayout(new BoxLayout(directionPanel, BoxLayout.Y_AXIS));
+        add(directionPanel, BorderLayout.CENTER);
+
+        currentDirectionLabel = new JLabel();
+        add(currentDirectionLabel, BorderLayout.NORTH);
+
+        Font font = new Font("SansSerif", Font.BOLD, 34);
+        imageSize = font.getSize();
 
         timer = new Timer();
     }
@@ -47,9 +58,10 @@ public class Keyset extends JPanel implements KeyListener {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_A -> isAKeyPressed = isPressed;
-            case KeyEvent.VK_W, KeyEvent.VK_SPACE -> isWKeyPressed = isPressed;
+            case KeyEvent.VK_W -> isWKeyPressed = isPressed;
             case KeyEvent.VK_S -> isSKeyPressed = isPressed;
             case KeyEvent.VK_D -> isDKeyPressed = isPressed;
+            case KeyEvent.VK_SPACE -> isSpaceKeyPressed = isPressed;
         }
         scheduleUpdate();
     }
@@ -71,23 +83,28 @@ public class Keyset extends JPanel implements KeyListener {
         String newDirection = getDirection();
 
         if (!newDirection.isEmpty() && !newDirection.equals(lastDirection)) {
-            textArea.setText(newDirection + "\n" + textArea.getText());
+            ImageIcon icon = getDirectionIcon(newDirection);
+            currentDirectionLabel.setIcon(icon);
+            JLabel pastDirectionLabel = new JLabel(icon);
+            directionPanel.add(pastDirectionLabel, 0);  // 先頭に追加
+            directionPanel.revalidate();
             lastDirection = newDirection;
         } else if (newDirection.isEmpty()) {
+            currentDirectionLabel.setIcon(null);
             lastDirection = "";
         }
     }
 
     private String getDirection() {
-        if (isWKeyPressed && isAKeyPressed) {
+        if ((isWKeyPressed || isSpaceKeyPressed) && isAKeyPressed) {
             return "↖️";
-        } else if (isWKeyPressed && isDKeyPressed) {
+        } else if ((isWKeyPressed || isSpaceKeyPressed) && isDKeyPressed) {
             return "↗︎";
         } else if (isSKeyPressed && isAKeyPressed) {
             return "↙︎";
         } else if (isSKeyPressed && isDKeyPressed) {
             return "↘︎";
-        } else if (isWKeyPressed) {
+        } else if (isWKeyPressed || isSpaceKeyPressed) {
             return "↑";
         } else if (isSKeyPressed) {
             return "↓";
@@ -97,5 +114,25 @@ public class Keyset extends JPanel implements KeyListener {
             return "→";
         }
         return "";
+    }
+
+    private ImageIcon getDirectionIcon(String direction) {
+        String imageName = switch (direction) {
+            case "↖️" -> "up_left.png";
+            case "↗︎" -> "up_right.png";
+            case "↙︎" -> "down_left.png";
+            case "↘︎" -> "down_right.png";
+            case "↑" -> "up.png";
+            case "↓" -> "down.png";
+            case "←" -> "left.png";
+            case "→" -> "right.png";
+            default -> null;
+        };
+        if (imageName == null) return null;
+
+        ImageIcon icon = new ImageIcon(imageName);
+        Image img = icon.getImage();
+        Image newImg = img.getScaledInstance(imageSize, imageSize, Image.SCALE_SMOOTH);
+        return new ImageIcon(newImg);
     }
 }
