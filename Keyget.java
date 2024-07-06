@@ -2,8 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 public class Keyget extends JFrame implements KeyListener {
     private JTextArea textArea;
@@ -12,7 +15,8 @@ public class Keyget extends JFrame implements KeyListener {
     private boolean isSKeyPressed = false;
     private boolean isDKeyPressed = false;
     private String lastDirection = "";
-    private boolean isDiagonalReleased = false;
+    private Timer timer;
+    private boolean isUpdatePending = false;
 
     public Keyget() {
         setTitle("Key Event Demo");
@@ -29,6 +33,8 @@ public class Keyget extends JFrame implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
+
+        timer = new Timer();
     }
 
     @Override
@@ -39,44 +45,46 @@ public class Keyget extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         updateKeyState(e, true);
-        updateDirection();
-        isDiagonalReleased = false;
+        scheduleUpdate();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         updateKeyState(e, false);
-        if (!isDiagonalReleased) {
-            updateDirection();
-        }
+        scheduleUpdate();
     }
 
     private void updateKeyState(KeyEvent e, boolean isPressed) {
-        switch (e.getKeyChar()) {
-            case 'a':
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_A:
                 isAKeyPressed = isPressed;
                 break;
-            case 'w':
-            case ' ':
+            case KeyEvent.VK_W:
+            case KeyEvent.VK_SPACE:
                 isWKeyPressed = isPressed;
                 break;
-            case 's':
+            case KeyEvent.VK_S:
                 isSKeyPressed = isPressed;
                 break;
-            case 'd':
+            case KeyEvent.VK_D:
                 isDKeyPressed = isPressed;
                 break;
         }
+    }
 
-        // スペースキーと方向キーの同時押し解除を検出
-        if (!isPressed && (e.getKeyChar() == ' ' || e.getKeyChar() == 'w')) {
-            if (isAKeyPressed || isDKeyPressed) {
-                isDiagonalReleased = true;
-            }
-        } else if (!isPressed && (e.getKeyChar() == 'a' || e.getKeyChar() == 'd')) {
-            if (isWKeyPressed) {
-                isDiagonalReleased = true;
-            }
+    private void scheduleUpdate() {
+        if (!isUpdatePending) {
+            isUpdatePending = true;
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    SwingUtilities.invokeLater(() -> {
+                        updateDirection();
+                        isUpdatePending = false;
+                    });
+                }
+            }, 10); // 10ミリ秒の遅延
         }
     }
 
@@ -113,7 +121,9 @@ public class Keyget extends JFrame implements KeyListener {
     }
 
     public static void main(String[] args) {
-        Keyget frame = new Keyget();
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            Keyget frame = new Keyget();
+            frame.setVisible(true);
+        });
     }
 }
