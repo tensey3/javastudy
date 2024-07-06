@@ -103,7 +103,7 @@ public class Keyget extends JFrame implements KeyListener {
         if (isWKeyPressed && isAKeyPressed) {
             return "↖️";
         } else if (isWKeyPressed && isDKeyPressed) {
-            return "↗️";
+            return "↗︎";
         } else if (isSKeyPressed && isAKeyPressed) {
             return "↙︎";
         } else if (isSKeyPressed && isDKeyPressed) {
