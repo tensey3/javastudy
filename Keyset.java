@@ -86,7 +86,7 @@ public class Keyset extends JPanel implements KeyListener {
             ImageIcon icon = getDirectionIcon(newcomen);
             currentDirectionLabel.setIcon(icon);
             JLabel pastDirectionLabel = new JLabel(icon);
-            directionPanel.add(pastDirectionLabel, 0);  // 先頭に追加
+            directionPanel.add(pastDirectionLabel, 0);
             directionPanel.revalidate();
             lastDirection = newcomen;
         } else if (newcomen.isEmpty()) {

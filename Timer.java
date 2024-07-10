@@ -29,7 +29,7 @@ public class Timer {
             flam.add(1); // 新しいカウンターを1で開始
         }
 
-        // カウンターの表示を更新
+        // カウンターを新しく作る
         StringBuilder sb = new StringBuilder();
         for (int counter : flam) {
             sb.append(counter).append("\n");
