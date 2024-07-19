@@ -11,7 +11,7 @@ public class Timer {
     public Timer(JTextArea timerTextArea) {
         this.timerTextArea = timerTextArea;
         this.flam = new ArrayList<>();
-        this.flam.add(0); // ファーストカウンターを追加
+        this.flam.add(0); // 最初のカウンターを追加
 
         swingTimer = new javax.swing.Timer(17, e -> SwingUtilities.invokeLater(this::updateCounters));
         swingTimer.start();
