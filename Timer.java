@@ -13,30 +13,23 @@ public class Timer {
         this.flam = new ArrayList<>();
         this.flam.add(0); // 最初のカウンターを追加
 
-        swingTimer = new javax.swing.Timer(17, e -> SwingUtilities.invokeLater(this::updateCounters));
+        // javax.swing.Timerを使ってカウントを更新
+        swingTimer = new javax.swing.Timer(17, e -> SwingUtilities.invokeLater(this::updateCounters)); // 0.017秒ごとに実行
         swingTimer.start();
     }
 
     private void updateCounters() {
-        incrementLastCounter();
-        resetCounterIfNeeded();
-        updateTextArea();
-    }
-
-    private void incrementLastCounter() {
+        // 最後のカウンターを更新
         int lastIndex = flam.size() - 1;
         flam.set(lastIndex, flam.get(lastIndex) + 1);
-    }
 
-    private void resetCounterIfNeeded() {
-        int lastIndex = flam.size() - 1;
+        // 99に到達したら新しいカウンターを追加
         if (flam.get(lastIndex) > 99) {
-            flam.set(lastIndex, 99);
-            flam.add(1);
+            flam.set(lastIndex, 99); // カウンターを99で固定
+            flam.add(1); // 新しいカウンターを1で開始
         }
-    }
 
-    private void updateTextArea() {
+        // カウンターを新しく作る
         StringBuilder sb = new StringBuilder();
         for (int counter : flam) {
             sb.append(counter).append("\n");

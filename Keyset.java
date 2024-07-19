@@ -22,6 +22,8 @@ public class Keyset extends JPanel implements KeyListener {
     private final Timer timer;
     private boolean isUpdatePending = false;
     private final int imageSize;
+    private long keyPressTime = 0;
+    private static final long PRESS_THRESHOLD = 50;
 
     public Keyset() {
         setLayout(new BorderLayout());
@@ -40,9 +42,7 @@ public class Keyset extends JPanel implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // キーがタイプされたときの処理
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -63,6 +63,13 @@ public class Keyset extends JPanel implements KeyListener {
             case KeyEvent.VK_D -> isDKeyPressed = isPressed;
             case KeyEvent.VK_SPACE -> isSpaceKeyPressed = isPressed;
         }
+
+        if (isPressed) {
+            keyPressTime = System.currentTimeMillis();
+        } else {
+            keyPressTime = 0;
+        }
+
         scheduleUpdate();
     }
 
@@ -72,10 +79,14 @@ public class Keyset extends JPanel implements KeyListener {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    updateDirection();
-                    isUpdatePending = false;
+                    long currentTime = System.currentTimeMillis();
+                    if (keyPressTime != 0 && (currentTime - keyPressTime >= PRESS_THRESHOLD)) {
+                        updateDirection();
+                    } else {
+                        isUpdatePending = false;
+                    }
                 }
-            }, 10); // 10ミリ秒の遅延
+            }, 10);
         }
     }
 
@@ -93,6 +104,7 @@ public class Keyset extends JPanel implements KeyListener {
             currentDirectionLabel.setIcon(null);
             lastDirection = "";
         }
+        isUpdatePending = false;
     }
 
     private String getDirection() {
